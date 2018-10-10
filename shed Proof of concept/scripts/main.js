@@ -1,44 +1,48 @@
 let divBoard = document.getElementById("emojiboarddiv");
 let items = divBoard.children;
 
-let isMouseDown= null; 
 
-function onMouseDown(e,item){
-	isMouseDown = item;
-	console.log('clicked')
-}
-function onMouseMove(e,item){
-	e.preventDefault();
-	item.style.left = e.clientX;
-	item.style.top = e.clientY;
-	console.log('dragging');
-}
-function onMouseUp(e,item){
-	isMouseDown = null;
-	console.log('finished');
-}
+var mousePosition;
+var div;
+var isDown = false;
 
-function mouseClick(e,item){
-	
-}
+var offset = [0,0];
+
+
+
 
 for (let i = 0; i< items.length; i++){
 	
 	let item = items[i];
-	
-	item.addEventListener('mousedown',function(e)
-	{	
-		console.log('new start');
-		console.log();
-	});
+	console.log('loading')
 	
 	
-	item.addEventListener('mousemove',function(){
-		console.log('dragging');
-	});
-	
-	/*item.addEventListener('mouseup',(e) => {
-	onMouseUp(e,item)}); */
+	item.addEventListener('mousedown', function(e) {
+		isDown = true;
+		offset = [
+			item.offsetLeft - e.clientX,
+			item.offsetTop - e.clientY
+		];
+	}, true);
+
+	document.addEventListener('mouseup', function() {
+		isDown = false;
+	}, true);
+
+	document.addEventListener('mousemove', function(event) {
+		event.preventDefault();
+		if (isDown) {
+			mousePosition = {
+		
+				x : event.clientX,
+				y : event.clientY
+		
+			};
+			item.style.left = (mousePosition.x + offset[0]) + 'px';
+			item.style.top  = (mousePosition.y + offset[1]) +'px';
+		}
+	}, true);
+
 	
 	
 }
